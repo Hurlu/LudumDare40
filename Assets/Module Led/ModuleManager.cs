@@ -98,7 +98,7 @@ public class ModuleManager : MonoBehaviour
         PARLOTTE = 4,
         WRITING = 5,
         CRANK = 6,
-        VENTILO = 6,
+        VENTILO = 7,
     }
 
     public List<GameObject> _modules;
