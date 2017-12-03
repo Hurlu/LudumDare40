@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class NewBehaviourScript1 : MonoBehaviour {
+public class Manage_Leds : MonoBehaviour {
     public Light [] array = new Light [6];
 
 
@@ -12,8 +12,7 @@ public class NewBehaviourScript1 : MonoBehaviour {
         System.Random random = new System.Random();
         return random.Next(min, max);
     }
-
-   private void Shuffle<T>(T[] array)
+    private void Shuffle<T>(T[] array)
     {
         System.Random random = new System.Random();
         int n = array.Length;
@@ -25,6 +24,10 @@ public class NewBehaviourScript1 : MonoBehaviour {
             array[i] = t;
         }
     }
+   // private Sprite MySprite()
+    //{
+
+    //}
 
     void InputKeyborad() {
         if (Input.GetKeyUp(KeyCode.Alpha1))
