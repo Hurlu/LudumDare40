@@ -6,9 +6,11 @@ using System;
 public class Manage_Leds : MonoBehaviour {
     #region "Variables"
 
-    public SpriteRenderer [] Sprite_RD_array = new SpriteRenderer [6];
+    public SpriteRenderer [] SR_lamps_array = new SpriteRenderer [6];
+    public SpriteRenderer[] SR_number_array = new SpriteRenderer[6];
     public Sprite [] S_on_array = new Sprite [6];
     public Sprite [] S_off_array = new Sprite [6];
+    public Sprite[] S_number_array = new Sprite[6];
     private Boolean [] L_is_on = new Boolean [6];
 
     #endregion
@@ -21,7 +23,7 @@ public class Manage_Leds : MonoBehaviour {
         return random.Next(min, max);
     }
 
-    private void Shuffle(SpriteRenderer[] array, Sprite[] array2, Sprite[] array3, Boolean[] array4)
+    private void Shuffle(SpriteRenderer[] array, Sprite[] array2, Sprite[] array3, Boolean[] array4, Sprite[] array5, SpriteRenderer[] array6)
     {
         System.Random random = new System.Random();
         int n = array.Length;
@@ -43,6 +45,16 @@ public class Manage_Leds : MonoBehaviour {
             Boolean t4 = array4[r];
             array4[r] = array4[i];
             array4[i] = t4;
+
+            Sprite t5 = array5[r];
+            array5[r] = array5[i];
+            array5[i] = t5;
+
+            SpriteRenderer t6 = array6[r];
+            array6[r] = array6[i];
+            array6[i] = t6;
+            for (int j = 0; j < 6; j++)
+                array6[j].sprite = array5[j];
         }
     }
     
@@ -55,12 +67,12 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[0] == false)
             {
-                Sprite_RD_array[0].sprite = S_on_array[0];
+                SR_lamps_array[0].sprite = S_on_array[0];
                 L_is_on[0] = true;
             }
             else if (L_is_on[0] == true)
             {
-                Sprite_RD_array[0].sprite = S_off_array[0];
+                SR_lamps_array[0].sprite = S_off_array[0];
                 L_is_on[0] = false;
             }
         }
@@ -69,12 +81,12 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[1] == false)
             {
-                Sprite_RD_array[1].sprite = S_on_array[1];
+                SR_lamps_array[1].sprite = S_on_array[1];
                 L_is_on[1] = true;
             }
             else if (L_is_on[1] == true)
             {
-                Sprite_RD_array[1].sprite = S_off_array[1];
+                SR_lamps_array[1].sprite = S_off_array[1];
                 L_is_on[1] = false;
             }
         }
@@ -83,12 +95,12 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[2] == false)
             {
-                Sprite_RD_array[2].sprite = S_on_array[2];
+                SR_lamps_array[2].sprite = S_on_array[2];
                 L_is_on[2] = true;
             }
             else if (L_is_on[2] == true)
             {
-                Sprite_RD_array[2].sprite = S_off_array[2];
+                SR_lamps_array[2].sprite = S_off_array[2];
                 L_is_on[2] = false;
             }
         }
@@ -97,12 +109,12 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[3] == false)
             {
-                Sprite_RD_array[3].sprite = S_on_array[3];
+                SR_lamps_array[3].sprite = S_on_array[3];
                 L_is_on[3] = true;
             }
             else if (L_is_on[3] == true)
             {
-                Sprite_RD_array[3].sprite = S_off_array[3];
+                SR_lamps_array[3].sprite = S_off_array[3];
                 L_is_on[3] = false;
             }
         }
@@ -111,12 +123,12 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[4] == false)
             {
-                Sprite_RD_array[4].sprite = S_on_array[4];
+                SR_lamps_array[4].sprite = S_on_array[4];
                 L_is_on[4] = true;
             }
             else if (L_is_on[4] == true)
             {
-                Sprite_RD_array[4].sprite = S_off_array[4];
+                SR_lamps_array[4].sprite = S_off_array[4];
                 L_is_on[4] = false;
             }
         }
@@ -125,18 +137,18 @@ public class Manage_Leds : MonoBehaviour {
         {
             if (L_is_on[5] == false)
             {
-                Sprite_RD_array[5].sprite = S_on_array[5];
+                SR_lamps_array[5].sprite = S_on_array[5];
                 L_is_on[5] = true;
             }
             else if (L_is_on[5] == true)
             {
-                Sprite_RD_array[5].sprite = S_off_array[5];
+                SR_lamps_array[5].sprite = S_off_array[5];
                 L_is_on[5] = false;
             }
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            Shuffle(Sprite_RD_array, S_on_array, S_off_array, L_is_on);
+            Shuffle(SR_lamps_array, S_on_array, S_off_array, L_is_on, S_number_array, SR_number_array);
         }
     }
 
