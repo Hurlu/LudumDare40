@@ -41,3 +41,30 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: WallPlane
+    uniqueID: 4123934517
+    locked: 0
+  - name: BetweenWallAndDesk
+    uniqueID: 4007470431
+    locked: 0
+  - name: DeskPlane
+    uniqueID: 3045190611
+    locked: 0
+  - name: GegerBackground
+    uniqueID: 3241397979
+    locked: 0
+  - name: OnDesk
+    uniqueID: 2361029369
+    locked: 0
+  - name: GegerLimit
+    uniqueID: 3115394619
+    locked: 0
+  - name: GegerHideLimit
+    uniqueID: 2977257625
+    locked: 0
+  - name: GegerCadran
+    uniqueID: 2640254749
+    locked: 0
+  - name: OnYou
+    uniqueID: 3336566489
+    locked: 0

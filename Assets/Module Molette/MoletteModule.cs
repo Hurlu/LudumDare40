@@ -7,16 +7,29 @@ using System.Linq;
 public class MoletteModule : MonoBehaviour
 {
 
-    public List<int> PivotList = new List<int>{0};
-    private int rotateIdx;
+    public List<int> PivotList = new List<int>{0};    
     public float rotaSpeed;
     public float rotaWait;
     private bool isRotating = false;
+    public int StartInList;
+
+    public List<Vector2> BubblePositions;
+    private List<GameObject> _bubbles = new List<GameObject>();
+    public GameObject BubblePrefab;
+
+    private System.Random _randomizer = new System.Random();
 
 	// Use this for initialization
-	void Start () {
-		if (PivotList.Any(piv => piv < -360 || piv > 360))
-		    throw new Exception("Should not have values below -360 or greater than 360 in pivot list !");
+	void Start ()
+	{
+	    for (int idx = 0; idx < BubblePositions.Count; idx++)
+	    {
+	        var new_bubble = Instantiate(BubblePrefab);
+	        BubblePrefab.transform.position = BubblePositions[idx];
+	        BubblePrefab.transform.SetParent(transform.parent);
+	        //BubblePrefab.GetComponent<SpriteRenderer>().enabled = false;
+	        _bubbles.Add(new_bubble);
+	    }
 	}
 
     IEnumerator rotateTo(int rotation)
@@ -33,24 +46,30 @@ public class MoletteModule : MonoBehaviour
             yield return new WaitForSeconds(rotaWait);
             Debug.LogFormat("Current rota == {0}, rotation to achieve == {1}", transform.rotation.eulerAngles.z, rotation);
         }
+        _bubbles[StartInList].GetComponent<SpriteRenderer>().enabled = false;
         Debug.Log("Finished rotating !");
         isRotating = false;
     }
 
 	// Update is called once per frame
 	void Update () {
-	    if (Input.GetKeyDown(KeyCode.W) && !isRotating)
+	    if (Input.GetKeyDown(KeyCode.C) && !isRotating)
 	    {
-	        rotateIdx = (rotateIdx + 1) % PivotList.Count;
-	        Debug.LogFormat("New values from W are Pivotlist[{0}] = {1}", rotateIdx, PivotList[rotateIdx]);
-	        StartCoroutine(rotateTo(PivotList[rotateIdx]));
+	        StartInList = (StartInList + 1) % PivotList.Count;
+	        Debug.LogFormat("New values from W are Pivotlist[{0}] = {1}", StartInList, PivotList[StartInList]);
+	        StartCoroutine(rotateTo(PivotList[StartInList]));
 	    }
-		else if (Input.GetKeyDown(KeyCode.C) && !isRotating)
+		else if (Input.GetKeyDown(KeyCode.W) && !isRotating)
 	    {
-	        rotateIdx = (rotateIdx == 0) ? PivotList.Count - 1 : rotateIdx - 1;
-	        Debug.LogFormat("New values from C are Pivotlist[{0}] = {1}", rotateIdx, PivotList[rotateIdx]);
-	        StartCoroutine(rotateTo(PivotList[rotateIdx]));
+	        StartInList = (StartInList == 0) ? PivotList.Count - 1 : StartInList - 1;
+	        Debug.LogFormat("New values from C are Pivotlist[{0}] = {1}", StartInList, PivotList[StartInList]);
+	        StartCoroutine(rotateTo(PivotList[StartInList]));
 	    }
 	}
 
+
+    public void SpawnRandomBubble()
+    {
+        _bubbles[_randomizer.Next(_bubbles.Count)].GetComponent<SpriteRenderer>().enabled = true;
+    }
 }
