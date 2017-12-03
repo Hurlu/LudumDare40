@@ -5,102 +5,80 @@ using UnityEngine;
 public class Manage_my_boss : MonoBehaviour {
     #region "Variables"
 
-    private int T_Angry;
     public SpriteRenderer Boss;
-    public int Temps_min;
-    public int Temps_max;
-    public int Mutiplicateur;
+    public int Temps_Enrage_min;
+    public int Temps_Enrage_max;
+    public float Multiplicateur;
+    public float Diviseur;
+    private int T_Angry;
+    private float Spam = 10;
     private float uni_timer;
-    private AudioClip Rage;
-    System.Random random = new System.Random();
-    System.Random R_Angry = new System.Random();
+    private AudioSource A_source;
+    private int Counter = 0;
+    private float tmp;
+    private System.Random random = new System.Random();
+    private System.Random R_Angry = new System.Random();
 
     #endregion
 
     private int RandomNumber(int min, int max)
     {
-        return random.Next(min, max);
+        return R_Angry.Next(min, max);
     }
     // Use this for initialization
     void Start()
     {
-        T_Angry = RandomNumber(Temps_min, Temps_max);
+        T_Angry = RandomNumber(Temps_Enrage_min, Temps_Enrage_max);
+        tmp = T_Angry;
         Boss = GetComponentInChildren<SpriteRenderer>();
-        Rage = GetComponentInChildren<AudioClip>();
-        setRespawnTimer();
+        A_source = GetComponentInChildren<AudioSource>();
+        SetRespawnTimer();
     }
 
-    private void setRespawnTimer()
+    private void SetRespawnTimer()
     {
-        uni_timer = random.Next(6, 11);
+        uni_timer = random.Next(6, 8);
     }
-
-    private void Respawn (System.Object source, System.Timers.ElapsedEventArgs e, int T_Respawn)
-    {
-        /*
-        int tmp;
-           if (Boss.enabled == true)
-        {
-            tmp = Mutiplicateur * T_Respawn;
-            Timer_Respawn(T_Respawn, tmp);
-        }
-           else if (Boss.enabled == false)
-        {
-            tmp = Mutiplicateur * T_Respawn;
-            Timer_Respawn(T_Respawn, tmp);
-        }
-           */
-    }
-
-    private void Timer_Respawn(int min, int max)
-    {
-        /*
-         * int T_Respawn = RandomNumber(min, max);
-        T_Timer = new System.Timers.Timer();
-        uni_timer = Time.time;
-        T_Timer.Interval = 1000 * T_Respawn;
-        T_Timer.Elapsed += Respawn;
-        T_Timer.Enabled = true;
-        */
-    }
-    
-    IEnumerator waitBossDeath(int min, int max)
+    IEnumerator WaitBossDeath(int min, int max)
     {
         int i = 0;
-        float tmp;
-        Vector3 position = new Vector3(0, 0, 0);
 
-        tmp = (Mutiplicateur * (float)0.10 ) * T_Angry;
         while (Boss.enabled)
         {
             yield return new WaitForSeconds(1);
             i++;
-            if (i == tmp)
+            BossAlive();
+            if (i >= tmp)
             {
-                AudioSource.PlayClipAtPoint(Rage, position);
+                A_source.Play();
             }
         }
-        i = 0;
-        setRespawnTimer();
+        A_source.Stop();
+        Counter = 0;
+        SetRespawnTimer();
     }
 
-    void spawnBoss()
+    void SpawnBoss()
     {
+        Spam *= Multiplicateur;
+        Spam = (int)Spam;
+        tmp /= Diviseur;
         Boss.enabled = true;
-        StartCoroutine(waitBossDeath(Temps_min, Temps_max));
+        StartCoroutine(WaitBossDeath(Temps_Enrage_min, Temps_Enrage_max));
     }
 
-    void bossAlive()
+    void BossAlive()
     {
-
+        if (Counter >= Spam)
+            Boss.enabled = false;
     }
 
     // Update is called once per frame
     void Update () {
         if (uni_timer <= 0 && !Boss.enabled)
-            spawnBoss();
-        else if (Boss.enabled)
-            bossAlive();
+            SpawnBoss();
+        if (Input.GetKeyUp(KeyCode.S) && Boss.enabled == true)
+            Counter++;
         else
             uni_timer -= Time.deltaTime;
 
