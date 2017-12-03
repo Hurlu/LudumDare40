@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +14,9 @@ public class WaterDropScript : MonoBehaviour
 	void Update ()
 	{
 	    transform.position = new Vector3(transform.position.x, transform.position.y - Speed, transform.position.z);
-	    if (transform.position.y < -50)
-	        Destroy(this);
+	    if (transform.position.y < -20)
+	    {
+	        Destroy(this.gameObject);
+	    }
 	}
 }
