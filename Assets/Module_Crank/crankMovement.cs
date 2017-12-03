@@ -11,22 +11,25 @@ public class crankMovement : MonoBehaviour {
     public float decelDeltaTime = 0.1f;
     public float maxSpeed = 1f;
     public float maxDistance = 3f;
+    public CrankLevel level;
     public Transform pivot;
+    public Transform parent;
     private Vector3[] positions = new Vector3[64];
     private bool isCrankDown = false;
     private float nextAccel;
     private float nextDecel;
     private float speed = 0;
     private float moveLeft = 0;
-    private int posIdx;
+    private int posIdx = -1;
     private Vector3 mousePos;
+    private int deltaMovement = 0;
 
 	// Use this for initialization
 	void Start () {
         float r = Vector3.Distance(transform.position, pivot.position);
         for (int i = 0; i < 64; i++)
         {
-            positions[i] = Quaternion.AngleAxis(360f / 64f * i, Vector3.forward) * (Vector3.right * r);
+            positions[i] = Quaternion.AngleAxis(360f / 64f * i, Vector3.forward) * (Vector3.right * r) + pivot.position;
         }
         MovetoNearest(transform.position);
     }
@@ -45,7 +48,7 @@ public class crankMovement : MonoBehaviour {
 
     private void OnMouseUp()
     {
-            ToggleOff();
+        ToggleOff();
     }
 
     private void ToggleOff()
@@ -79,12 +82,7 @@ public class crankMovement : MonoBehaviour {
 
     private void Move()
     {
-        if (isCrankDown)
-        {
-            MovetoNearest(speed);
-        }
-        else
-            MovetoNearest(speed);
+        MovetoNearest(speed);
     }
 
     private int addToIndex(int idx, int delta)
@@ -113,15 +111,24 @@ public class crankMovement : MonoBehaviour {
         }
         if (deltaDist / 2 < dist * -1 || deltaDist == 0)
         {
+            parent.Rotate(new Vector3(0, 0, (float)(idx - posIdx) * 360.0f / 64f));
+            deltaMovement += Mathf.Abs(idx - posIdx);
             moveLeft = dist;
             posIdx = idx;
-            transform.position = pos;
         }
         else
         {
+            parent.Rotate(new Vector3(0, 0, (float)(addToIndex(idx, 1) - posIdx) * 360.0f / 64f));
+            deltaMovement += Mathf.Abs(addToIndex(idx, 1) - posIdx);
             moveLeft = deltaDist + dist;
             posIdx = addToIndex(idx, 1);
-            transform.position = positions[posIdx];
+            pos = positions[posIdx];
+        }
+        transform.position = positions[posIdx];
+        if (deltaMovement > 128)
+        {
+            deltaMovement -= 128;
+            level.Increase();
         }
     }
 
@@ -140,6 +147,7 @@ public class crankMovement : MonoBehaviour {
         }
         transform.position = positions[minIdx];
         posIdx = minIdx;
+        parent.Rotate(new Vector3(0, 0, (float)posIdx * 360.0f / 64 - 90));
     }
 
     private void checkDistance()
