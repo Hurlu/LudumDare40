@@ -29,7 +29,7 @@ public class Manage_Leds : MonoBehaviour {
         int n = SR_lamps_array.Length;
         for (int i = 0; i < n; i++)
         {
-            int r = RandomNumber(0, n);
+            int r = i + random.Next(n - i);
 
             Sprite t2 = S_on_array[r];
             S_on_array[r] = S_on_array[i];
