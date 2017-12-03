@@ -67,7 +67,8 @@ public class ModuleManager : MonoBehaviour
         MOLETTE,
         PARLOTTE,
         WRITING,
-        CRANK
+        CRANK,
+        VENTILO
     }
 
     public List<GameObject> _modules;
@@ -80,8 +81,6 @@ public class ModuleManager : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 	    _canvas = GameObject.Find("Canvas");
-	    if (_canvas == null)
-	        Debug.Log("MDRRRRRR");
 	    _currentLevel = new Level1();
 		_currentModules.Add("Button", Instantiate(_modules[(int)Modules.BUTTON]));
 	    _currentModules["Button"].transform.SetParent(_canvas.transform);
@@ -89,7 +88,6 @@ public class ModuleManager : MonoBehaviour
 	
     // Update is called once per frame
     void Update () {
-        Debug.Log("Value of current level :" + _currentLevel.level);
         switch (_currentLevel.level)
         {
             case 1:
@@ -121,10 +119,9 @@ public class ModuleManager : MonoBehaviour
 
     void UpdateLevel1()
     {
-        Debug.Log("On passe la dedans au moins ?");
         if (_currentLevel.completion)
         {
-            Debug.Log("Noted as completed !");
+            Debug.Log("Level 1 réussi !");
             _currentLevel = null;
             _currentLevel = new Level2();
         }
