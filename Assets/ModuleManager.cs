@@ -80,10 +80,9 @@ public class ModuleManager : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-	    _canvas = GameObject.Find("Canvas");
 	    _currentLevel = new Level1();
-		_currentModules.Add("Button", Instantiate(_modules[(int)Modules.BUTTON]));
-	    _currentModules["Button"].transform.SetParent(_canvas.transform);
+		_currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
+	    _currentModules["Crank"].transform.SetParent(transform);
 	}
 	
     // Update is called once per frame

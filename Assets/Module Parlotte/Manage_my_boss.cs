@@ -10,10 +10,12 @@ public class Manage_my_boss : MonoBehaviour {
     public int Temps_Enrage_max;
     public float Multiplicateur;
     public float Diviseur;
+    public AudioClip[] Audios = new AudioClip[2];
     private int T_Angry;
     private float Spam = 10;
     private float uni_timer;
     private AudioSource A_source;
+    private AudioSource A_source2;
     private int Counter = 0;
     private float tmp;
     private System.Random random = new System.Random();
@@ -32,6 +34,7 @@ public class Manage_my_boss : MonoBehaviour {
         tmp = T_Angry;
         Boss = GetComponentInChildren<SpriteRenderer>();
         A_source = GetComponentInChildren<AudioSource>();
+        A_source2 = GetComponentInChildren<AudioSource>();
         SetRespawnTimer();
     }
 
@@ -78,9 +81,15 @@ public class Manage_my_boss : MonoBehaviour {
         if (uni_timer <= 0 && !Boss.enabled)
             SpawnBoss();
         if (Input.GetKeyUp(KeyCode.S) && Boss.enabled == true)
+        {
+            if (A_source2.isPlaying == false)
+            {
+                A_source.Stop();
+                A_source2.PlayOneShot(Audios[RandomNumber(0, Audios.Length)]);
+            }
             Counter++;
+        }
         else
             uni_timer -= Time.deltaTime;
-
 	}
 }
