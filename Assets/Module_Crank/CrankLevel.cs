@@ -15,6 +15,7 @@ public class CrankLevel : MonoBehaviour {
     private float lowWater = 0;
     private float highWater = 0;
     private int level;
+    public ModuleManager mm;
 
     // Use this for initialization
     void Start () {
@@ -103,6 +104,7 @@ public class CrankLevel : MonoBehaviour {
             else
             {
                 light.enabled = false;
+                mm.ReceiveValidation("CRANK FAILED");
             }
         }
     }

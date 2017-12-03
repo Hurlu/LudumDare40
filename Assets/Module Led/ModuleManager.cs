@@ -15,6 +15,7 @@ public abstract class ALevel
 public class Level1 :  ALevel
 {
     private int _buttonpress_validations = 0;
+    private int _buttonpress_failures = 0;
 
     public Level1()
     {
@@ -25,18 +26,47 @@ public class Level1 :  ALevel
     public override void GetValidation(string message)
     {
         Debug.Log("Validation == " + _buttonpress_validations);
-        if (message == "Button")
+        Debug.Log("Validation == " + _buttonpress_failures);
+        if (message == "LAMPE SUCCEED")
         {
-            Debug.Log("Getting validation for button !");
+            Debug.Log("Getting validation for Lampe !");
             _buttonpress_validations++;
+        }
+
+        if (message == "LAMPE FAILED")
+        {
+            Debug.Log("Getting failure for Lampe !");
+            _buttonpress_failures++;
+        }
+
+        if (message == "CRANK FAILED")
+        {
+            Debug.Log("Getting failure for Crank !");
+            _buttonpress_failures++;
+        }
+        if (message == "BOSS SUCCEED")
+        {
+            Debug.Log("Getting validation for Boss !");
+            _buttonpress_validations++;
+        }
+
+        if (message == "BOSS FAILED")
+        {
+            Debug.Log("Getting failure for Boss !");
+            _buttonpress_failures++;
         }
 
         if (_buttonpress_validations >= 3)
         {
             Debug.Log("Completion is true !");
             completion = true;
-            if (!completion)
-                Debug.Log("FOR REAL ?!!!");
+        }
+
+        if (_buttonpress_failures >= 2)
+        {
+            Debug.Log("Failure !");
+            //LOAD GAME OVER
+            completion = true;
         }
 
     }
@@ -81,8 +111,8 @@ public class ModuleManager : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 	    _currentLevel = new Level1();
-	    _currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
-	    _currentModules["Crank"].transform.SetParent(transform);
+/*		_currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
+	    _currentModules["Crank"].transform.SetParent(transform);*/
 	}
 	
     // Update is called once per frame
@@ -111,7 +141,7 @@ public class ModuleManager : MonoBehaviour
         }
     }
 
-    void ReceiveValidation(string message)
+    public void ReceiveValidation(string message)
     {
         _currentLevel.GetValidation(message);
     }
