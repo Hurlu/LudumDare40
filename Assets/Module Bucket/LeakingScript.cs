@@ -8,6 +8,8 @@ public class LeakingScript : MonoBehaviour
 
     public float LeakFrequency;
     public GameObject WaterDrop;
+
+    public Vector2 LeakingStart;
     private GameObject _currentDrop = null;
 
 	// Use this for initialization
@@ -27,6 +29,7 @@ public class LeakingScript : MonoBehaviour
         while (true)
         {
             _currentDrop = Instantiate(WaterDrop);
+            WaterDrop.transform.position = LeakingStart;
             _currentDrop.transform.SetParent(transform);
             _currentDrop.transform.position =
                new Vector3(_currentDrop.transform.position.x, _currentDrop.transform.position.y, transform.position.z);

@@ -11,7 +11,8 @@ public class BucketScript : MonoBehaviour
 
     public Sprite EmptyBucket;
     public Sprite FullBucket;
-
+    public Sprite OverFlowBucket;
+    public float DropDiseappearance;
 
     private float screenPoint = 10;
     private Vector3 offset;
@@ -40,6 +41,7 @@ public class BucketScript : MonoBehaviour
 
     void Overflow()
     {
+        GetComponent<SpriteRenderer>().sprite = OverFlowBucket;
         Debug.Log("Oh noes, it overflowes !");
     }
 
@@ -54,15 +56,19 @@ public class BucketScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name.StartsWith("WaterDrop"))
-        {
-            AddDrop();
-            Destroy(other.gameObject);
-        }
-        else if (other.name == "WaterHole")
+        if (other.name == "WaterHole")
         {
             _currentFill = 0;
             GetComponent<SpriteRenderer>().sprite = EmptyBucket;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.name.StartsWith("WaterDrop") && other.transform.position.y < DropDiseappearance)
+        {
+            AddDrop();
+            Destroy(other.gameObject);
         }
     }
 }

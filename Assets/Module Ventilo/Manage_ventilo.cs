@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿     using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,16 +25,12 @@ public class Manage_ventilo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(NeedlePivot.transform.eulerAngles);
-
         if (Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Release");
             ReleasePressure();
         }
         else
         {
-            Debug.Log("Accu");
             AccumulatePressure();
         }
     }
