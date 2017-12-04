@@ -234,19 +234,19 @@ public class Manage_Leds : MonoBehaviour
         else if (match == 0)
             mm.ReceiveValidation("LAMPE SUCCEED");
         for (int i = 0; i < 6; i++)
-            {
-                L_is_onEx[i] = false;
-                SR_lamps_ex[i].sprite = S_off_arrayEx[i];
-                L_is_on[i] = false;
-                SR_lamps_array[i].sprite = S_off_array[i];
-            }
+        {
+            L_is_onEx[i] = false;
+            SR_lamps_ex[i].sprite = S_off_arrayEx[i];
+            L_is_on[i] = false;
+            SR_lamps_array[i].sprite = S_off_array[i];
+        }
         StartCoroutine(Spawn_Lamp());
     }
 
     IEnumerator Spawn_Lamp()
     {
         int temps = RandomNumber(1, 2);
-        int i = 0; 
+        int i = 0;
 
         while (i < temps)
         {
