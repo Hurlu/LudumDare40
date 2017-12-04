@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class Manage_my_boss : MonoBehaviour {
+public class Manage_my_boss : MonoBehaviour
+{
     #region "Variables"
 
     public SpriteRenderer Boss;
@@ -10,6 +11,7 @@ public class Manage_my_boss : MonoBehaviour {
     public int Temps_Enrage_max;
     public float Multiplicateur;
     public float Diviseur;
+    public ModuleManager mm;
     public AudioClip[] Audios = new AudioClip[2];
     private int T_Angry;
     private float Spam = 10;
@@ -74,22 +76,23 @@ public class Manage_my_boss : MonoBehaviour {
     {
         if (Counter >= Spam)
             Boss.enabled = false;
+        mm.ReceiveValidation("BOSS SUCCED");
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (uni_timer <= 0 && !Boss.enabled)
             SpawnBoss();
         if (Input.GetKeyUp(KeyCode.S) && Boss.enabled == true)
         {
             if (A_source2.isPlaying == false)
             {
-                A_source.Stop();
                 A_source2.PlayOneShot(Audios[RandomNumber(0, Audios.Length)]);
             }
             Counter++;
         }
         else
             uni_timer -= Time.deltaTime;
-	}
+    }
 }

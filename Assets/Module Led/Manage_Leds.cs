@@ -3,15 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Manage_Leds : MonoBehaviour {
+public class Manage_Leds : MonoBehaviour
+{
     #region "Variables"
     public KeyCode[] Keycode_array = new KeyCode[6];
-    public SpriteRenderer [] SR_lamps_array = new SpriteRenderer [6];
+    public int Temps = 10;
+    public float Multiplicateur = 1.15f;
+    public float Multiplicateur1 = 1;
+    public ModuleManager mm;
+    public SpriteRenderer[] SR_lamps_ex = new SpriteRenderer[6];
+    public SpriteRenderer[] SR_lamps_array = new SpriteRenderer[6];
     public SpriteRenderer[] SR_number_array = new SpriteRenderer[6];
-    public Sprite [] S_on_array = new Sprite [6];
-    public Sprite [] S_off_array = new Sprite [6];
+    public Sprite[] S_on_array = new Sprite[6];
+    public Sprite[] S_off_array = new Sprite[6];
+    private Sprite[] S_on_arrayEx = new Sprite[6];
+    private Sprite[] S_off_arrayEx = new Sprite[6];
     public Sprite[] S_number_array = new Sprite[6];
-    private Boolean [] L_is_on = new Boolean [6];
+    private Boolean[] L_is_on = new Boolean[6];
+    private Boolean[] L_is_onEx = new Boolean[6];
+    private System.Random random = new System.Random();
+    private System.Random random2 = new System.Random();
 
     #endregion
 
@@ -19,13 +30,54 @@ public class Manage_Leds : MonoBehaviour {
 
     private int RandomNumber(int min, int max)
     {
-        System.Random random = new System.Random();
-        return random.Next(min, max);
+        int t = random.Next(min, max + 1);
+        return t;
+    }
+    IEnumerator WaitForEnd()
+    {
+        int i = 0;
+        float tmp = Temps * Multiplicateur1;
+
+        tmp = (int)tmp;
+        Multiplicateur1 /= Multiplicateur;
+        while (i <= tmp)
+        {
+            yield return new WaitForSeconds(1);
+            i++;
+        }
+        CheckPattern();
+    }
+    private void Shuffle_Ex()
+    {
+
+        int n = SR_lamps_ex.Length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + random2.Next(n - i);
+
+            Sprite t2 = S_on_arrayEx[r];
+            S_on_arrayEx[r] = S_on_arrayEx[i];
+            S_on_arrayEx[i] = t2;
+
+            t2 = S_off_arrayEx[r];
+            S_off_arrayEx[r] = S_off_arrayEx[i];
+            S_off_arrayEx[i] = t2;
+
+            Boolean t4 = L_is_onEx[r];
+            L_is_onEx[r] = L_is_onEx[i];
+            L_is_onEx[i] = t4;
+
+        }
+        for (int i = 0; i < n; i++)
+        {
+            SR_lamps_ex[i].sprite = (L_is_on[i]) ? S_on_arrayEx[i] : S_off_arrayEx[i];
+        }
+
     }
 
     private void Shuffle()
     {
-        System.Random random = new System.Random();
+
         int n = SR_lamps_array.Length;
         for (int i = 0; i < n; i++)
         {
@@ -57,12 +109,26 @@ public class Manage_Leds : MonoBehaviour {
             SR_number_array[i].sprite = S_number_array[i];
         }
     }
-    
+
     #endregion
+
+    void Randomize_Ex()
+    {
+        for (int i = 0; i < 6; i++) // Boucle pour check le tableau bool
+        {
+            L_is_onEx[i] = RandomNumber(0, 1) == 1;
+            if (L_is_onEx[i] == true)
+                SR_lamps_ex[i].sprite = S_on_arrayEx[i];
+            else
+                SR_lamps_ex[i].sprite = S_off_arrayEx[i];
+        }
+        StartCoroutine(WaitForEnd());
+    }
 
     #region "Keyboard Inputs"
 
-    void InputKeyborad() {
+    void InputKeyborad()
+    {
         if (Input.GetKeyUp(Keycode_array[0]))
         {
             if (L_is_on[0] == false)
@@ -154,17 +220,58 @@ public class Manage_Leds : MonoBehaviour {
 
     #endregion
 
+    void CheckPattern()
+    {
+        int match = 0;
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (L_is_on[i] != L_is_onEx[i])
+                match = 1;
+        }
+        if (match == 1)
+            mm.ReceiveValidation("LAMPE FAILED");
+        else if (match == 0)
+            mm.ReceiveValidation("LAMPE SUCCEED");
+        for (int i = 0; i < 6; i++)
+            {
+                L_is_onEx[i] = false;
+                SR_lamps_ex[i].sprite = S_off_arrayEx[i];
+                L_is_on[i] = false;
+                SR_lamps_array[i].sprite = S_off_array[i];
+            }
+        StartCoroutine(Spawn_Lamp());
+    }
+
+    IEnumerator Spawn_Lamp()
+    {
+        int temps = RandomNumber(1, 2);
+        int i = 0; 
+
+        while (i < temps)
+        {
+            yield return new WaitForSeconds(1);
+            i++;
+        }
+        Randomize_Ex();
+    }
+
     // Use this for initialization
     void Start()
     {
         for (int i = 0; i < 6; i++)
         {
             L_is_on[i] = false;
+            L_is_onEx[i] = false;
         }
+        S_on_arrayEx = S_on_array;
+        S_off_arrayEx = S_off_array;
+        StartCoroutine(Spawn_Lamp());
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         InputKeyborad();
-	}
+    }
 }
