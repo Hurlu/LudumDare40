@@ -11,6 +11,7 @@ public class CrankLevel : MonoBehaviour {
     public SpriteRenderer secondLight;
     public SpriteRenderer lampe;
     public SpriteRenderer brokenLampe;
+    public SpriteRenderer screen;
     private float lastDecrease;
     private float lowWater = 0;
     private float highWater = 0;
@@ -60,6 +61,10 @@ public class CrankLevel : MonoBehaviour {
             {
                 light.enabled = true;
                 secondLight.enabled = true;
+                screen.enabled = false;
+                Color c = screen.color;
+                c.a = 0;
+                screen.color = c;
             }
         }
         lastDecrease = Time.time + deltaIncrease;
@@ -79,9 +84,16 @@ public class CrankLevel : MonoBehaviour {
             {
                 light.enabled = !light.enabled;
                 secondLight.enabled = !secondLight.enabled;
+                screen.enabled = true;
+                Color c = screen.color;
+                c.a += 0.002f;
+                screen.color = c;
             }
             else
             {
+                Color c = screen.color;
+                c.a = 1f;
+                screen.color = c;
                 light.enabled = false;
                 secondLight.enabled = false;
             }
