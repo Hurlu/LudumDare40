@@ -61,7 +61,7 @@ public class ButtonModule : MonoBehaviour
     IEnumerator HideButton(int result)
     {
         var message = (result == 1) ? "ButtonGood" : "ButtonBad";
-        GameObject.Find("ModuleManager").SendMessage(message);
+        GameObject.Find("ModuleManager").SendMessage("ReceiveValidation", message);
         while (true)
         {
             ButtonRenderer.sprite = PushedButton;

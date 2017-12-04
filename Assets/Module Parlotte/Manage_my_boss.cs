@@ -32,11 +32,13 @@ public class Manage_my_boss : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        mm = GameObject.Find("ModuleManager");
         T_Angry = RandomNumber(Temps_Enrage_min, Temps_Enrage_max);
         tmp = T_Angry;
         Boss = GetComponentInChildren<SpriteRenderer>();
         A_source = GetComponentInChildren<AudioSource>();
         A_source2 = GetComponentInChildren<AudioSource>();
+        Boss.enabled = false;
         SetRespawnTimer();
     }
 
@@ -44,12 +46,18 @@ public class Manage_my_boss : MonoBehaviour
     {
         uni_timer = random.Next(6, 8);
     }
+
     IEnumerator WaitBossDeath(int min, int max)
     {
         int i = 0;
 
         while (Boss.enabled)
         {
+            if (Boss.transform.position.y < -1.90)
+            {
+                Debug.Log(Boss.transform);
+                Boss.transform.TransformDirection(Vector3.up);
+            }
             yield return new WaitForSeconds(1);
             i++;
             BossAlive();
@@ -69,7 +77,19 @@ public class Manage_my_boss : MonoBehaviour
         Spam = (int)Spam;
         tmp /= Diviseur;
         Boss.enabled = true;
+        StartCoroutine(LiftUpBoss());
         StartCoroutine(WaitBossDeath(Temps_Enrage_min, Temps_Enrage_max));
+
+    }
+
+    IEnumerator LiftUpBoss()
+    {
+        while (Boss.transform.localPosition.y < -2.40)
+        {
+            Debug.Log(Boss.transform.localPosition);
+            Boss.transform.Translate(new Vector3(0, 0.1f, 0));
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     void BossAlive()

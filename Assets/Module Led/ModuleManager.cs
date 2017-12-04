@@ -25,8 +25,6 @@ public class Level1 :  ALevel
 
     public override void GetValidation(string message)
     {
-        Debug.Log("Validation == " + _buttonpress_validations);
-        Debug.Log("Validation == " + _buttonpress_failures);
         if (message == "LAMPE SUCCEED")
         {
             Debug.Log("Getting validation for Lampe !");
