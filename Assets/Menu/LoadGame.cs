@@ -9,4 +9,10 @@ public class LoadGame : MonoBehaviour {
         Debug.Log(name);
         //        SceneManager.LoadScene("Menu", LoadSceneMode.Additive); Give full path
     }
+
+    public void QuitGame()
+    {
+        Debug.Log("I WANT TO QUIT !!!");
+        Application.Quit();
+    }
 }
