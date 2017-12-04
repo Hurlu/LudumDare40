@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 public class LoadMenu : MonoBehaviour {
 
 	public void  Load(string name) {
-        Debug.Log(name);
-        SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+        SceneManager.LoadScene(0);
         // Give full path
     }
 }

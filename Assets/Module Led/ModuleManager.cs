@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class ALevel
 {
     public int level;
     public bool completion;
     public abstract void GetValidation(string message);
+
+    protected void GameOver()
+    {
+        SceneManager.LoadScene(1);
+    }
 }
 
 public class Level1 :  ALevel
@@ -23,32 +29,27 @@ public class Level1 :  ALevel
     {
         if (message == "LAMPE SUCCEED")
         {
-            Debug.Log("Getting validation for Lampe !");
             _buttonpress_validations++;
         }
 
         if (message == "LAMPE FAILED")
         {
-            Debug.Log("Getting failure for Lampe !");
             _buttonpress_failures++;
         }
 
         if (message == "VANNE FAILED")
         {
-            Debug.Log("Getting failure for Lampe !");
             _buttonpress_failures++;
         }
 
         if (_buttonpress_validations >= 3)
         {
-            Debug.Log("Completion is true !");
             completion = true;
         }
 
         if (_buttonpress_failures >= 2)
         {
-            Debug.Log("Failure !");
-            //LOAD GAME OVER
+            GameOver();
             completion = true;
         }
 

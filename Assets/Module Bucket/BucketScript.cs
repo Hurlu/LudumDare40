@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BucketScript : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class BucketScript : MonoBehaviour
     public Sprite EmptyBucket;
     public Sprite FullBucket;
     public Sprite OverFlowBucket;
+    public Sprite SpillingBucket;
     public float DropDiseappearance;
 
     private float screenPoint = 10;
@@ -61,12 +63,19 @@ public class BucketScript : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = FullBucket;
     }
 
+    IEnumerator SpillBucket()
+    {
+        GetComponent<SpriteRenderer>().sprite = SpillingBucket;
+        yield return new WaitForSeconds(0.17f);
+        GetComponent<SpriteRenderer>().sprite = EmptyBucket;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "WaterHole")
+        if (other.name == "WaterHole" && _currentFill > 0)
         {
             _currentFill = 0;
-            GetComponent<SpriteRenderer>().sprite = EmptyBucket;
+            StartCoroutine(SpillBucket());
         }
     }
 
