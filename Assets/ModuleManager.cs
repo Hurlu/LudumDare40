@@ -81,7 +81,7 @@ public class ModuleManager : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 	    _currentLevel = new Level1();
-		_currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
+	    _currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
 	    _currentModules["Crank"].transform.SetParent(transform);
 	}
 	

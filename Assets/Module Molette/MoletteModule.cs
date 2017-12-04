@@ -27,7 +27,7 @@ public class MoletteModule : MonoBehaviour
 	        var new_bubble = Instantiate(BubblePrefab);
 	        BubblePrefab.transform.position = BubblePositions[idx];
 	        BubblePrefab.transform.SetParent(transform.parent);
-	        BubblePrefab.GetComponent<SpriteRenderer>().enabled = false;
+	        //BubblePrefab.GetComponent<SpriteRenderer>().enabled = false;
 	        _bubbles.Add(new_bubble);
 	    }
 	}
