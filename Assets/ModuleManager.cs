@@ -63,12 +63,12 @@ public class ModuleManager : MonoBehaviour
     {
         BUCKET = 0,
         BUTTON = 1,
-        LED,
-        MOLETTE,
-        PARLOTTE,
-        WRITING,
-        CRANK,
-        VENTILO
+        LED = 2,
+        MOLETTE = 3,
+        PARLOTTE = 4,
+        WRITING = 5,
+        CRANK = 6,
+        VENTILO = 6,
     }
 
     public List<GameObject> _modules;
