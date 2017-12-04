@@ -14,6 +14,7 @@ public class Manage_ventilo : MonoBehaviour
     public Vector3 unpressSpritePos;
     public Vector3 pressSpritePos;
 
+    public ModuleManager mm;   // Module Manager
     private bool releasing = false;
 
     // Use this for initialization
@@ -66,6 +67,7 @@ public class Manage_ventilo : MonoBehaviour
             NeedlePivot.transform.localEulerAngles =
                 new Vector3(NeedlePivot.transform.localEulerAngles.x, NeedlePivot.transform.localEulerAngles.y,
                     NeedlePivot.transform.localEulerAngles.z - pressure_speed);
+            mm.ReceiveValidation("VANNE FAILED");
         }
     }
 }

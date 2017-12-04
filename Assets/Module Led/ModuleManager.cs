@@ -37,15 +37,65 @@ public class Level1 :  ALevel
             _buttonpress_failures++;
         }
 
+        if (message == "VANNE FAILED")
+        {
+            Debug.Log("Getting failure for Lampe !");
+            _buttonpress_failures++;
+        }
+
+        if (_buttonpress_validations >= 3)
+        {
+            Debug.Log("Completion is true !");
+            completion = true;
+        }
+
+        if (_buttonpress_failures >= 2)
+        {
+            Debug.Log("Failure !");
+            //LOAD GAME OVER
+            completion = true;
+        }
+
+    }
+}
+
+public class Level2 : ALevel
+{
+    private int _buttonpress_validations = 0;
+    private int _buttonpress_failures = 0;
+
+    public Level2()
+    {
+        level = 2;
+        completion = false;
+    }
+
+    public override void GetValidation(string message)
+    {
+        Debug.Log("Validation == " + _buttonpress_validations);
+        Debug.Log("Validation == " + _buttonpress_failures);
+        if (message == "LAMPE SUCCEED")
+        {
+            Debug.Log("Getting validation for Lampe !");
+            _buttonpress_validations++;
+        }
+
+        if (message == "LAMPE FAILED")
+        {
+            Debug.Log("Getting failure for Lampe !");
+            _buttonpress_failures++;
+        }
+
+        if (message == "VANNE FAILED")
+        {
+            Debug.Log("Getting failure for Lampe !");
+            _buttonpress_failures++;
+        }
+
         if (message == "CRANK FAILED")
         {
             Debug.Log("Getting failure for Crank !");
             _buttonpress_failures++;
-        }
-        if (message == "BOSS SUCCEED")
-        {
-            Debug.Log("Getting validation for Boss !");
-            _buttonpress_validations++;
         }
 
         if (message == "BOSS FAILED")
@@ -70,19 +120,6 @@ public class Level1 :  ALevel
     }
 }
 
-public class Level2 : ALevel
-{
-    public Level2()
-    {
-        level = 2;
-        completion = false;
-    }
-
-    public override void GetValidation(string message)
-    {
-
-    }
-}
 
 public class ModuleManager : MonoBehaviour
 {
