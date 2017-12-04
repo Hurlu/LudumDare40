@@ -3,35 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class crankMovement : MonoBehaviour {
-
-    public float initialSpeed = 0.1f;
-    public float accelDelta = 0.01f;
-    public float accelDeltaTime = 0.1f;
-    public float decelDelta = 0.01f;
-    public float decelDeltaTime = 0.1f;
-    public float maxSpeed = 1f;
-    public float maxDistance = 3f;
+    
+    public float decelDelta = 0.1f;
+    public float decelDeltaTime = 0.3f;
     public CrankLevel level;
     public Transform pivot;
     public Transform parent;
     private Vector3[] positions = new Vector3[64];
     private bool isCrankDown = false;
-    private float nextAccel;
     private float nextDecel;
     private float speed = 0;
     private float moveLeft = 0;
     private int posIdx = -1;
     private Vector3 mousePos;
     private int deltaMovement = 0;
+    private float dist;
+    private float[] last_speed = new float[10];
+    private int advencement = 0;
+    private Vector3 oldMousePos;
 
 	// Use this for initialization
 	void Start () {
         float r = Vector3.Distance(transform.position, pivot.position);
         for (int i = 0; i < 64; i++)
         {
-            positions[i] = Quaternion.AngleAxis(360f / 64f * i, Vector3.forward) * (Vector3.right * r) + pivot.position;
+            positions[i] = Quaternion.AngleAxis(360f / 64f * i, Vector3.forward) * (Vector3.right * r);
+            positions[i].z = 0;
         }
+        for (int i = 0; i < last_speed.Length; i++)
+        {
+            last_speed[i] = 0;
+        }
+        dist = transform.localPosition.z;
         MovetoNearest(transform.position);
+        parent.Rotate(new Vector3(0, 0, -90));
+        speed = 0;
     }
 
     public bool isRunning()
@@ -42,8 +48,7 @@ public class crankMovement : MonoBehaviour {
     private void OnMouseDown()
     {
         isCrankDown = true;
-        speed = initialSpeed;
-        nextAccel = Time.time + accelDeltaTime;
+        oldMousePos = Input.mousePosition;
     }
 
     private void OnMouseUp()
@@ -62,27 +67,29 @@ public class crankMovement : MonoBehaviour {
 
     private void Accelerate()
     {
-        if (isCrankDown)
+        if (!isCrankDown && nextDecel < Time.time && Mathf.Abs(speed) > 0.01)
         {
-            if (nextAccel < Time.time && speed < maxSpeed)
-            {
-                nextAccel = Time.time + accelDeltaTime;
-                speed += accelDelta;
-            }
-        }
-        else
-        {
-            if (nextDecel < Time.time && speed > 0)
-            {
-                nextDecel = Time.time + decelDeltaTime;
-                speed -= decelDelta;
-            }
+            nextDecel = Time.time + decelDeltaTime;
+            if (speed > 0)
+                speed -= Mathf.Abs(speed) > decelDelta ? decelDelta : speed;
+            else
+                speed += Mathf.Abs(speed) > decelDelta ? decelDelta : speed;
         }
     }
 
     private void Move()
     {
-        MovetoNearest(speed);
+        if (isCrankDown)
+        {
+            Vector3 dir = mousePos - pivot.position;
+            dir = dir.normalized;
+            Vector3 tmp = dir * 2.3f;
+            MovetoNearest(tmp);
+        }
+        else
+        {
+            MovetoNearest();
+        }
     }
 
     private int addToIndex(int idx, int delta)
@@ -94,7 +101,7 @@ public class crankMovement : MonoBehaviour {
         return idx;
     }
 
-    private void MovetoNearest(float dist)
+    /*private void MovetoNearest(float dist)
     {
         Vector3 pos = transform.position;
         int idx = posIdx;
@@ -130,41 +137,89 @@ public class crankMovement : MonoBehaviour {
             deltaMovement -= 128;
             level.Increase();
         }
+    }*/
+
+    private void MovetoNearest()
+    {
+        int newIdx = posIdx - (int)speed;
+        advencement += (int)speed;
+        parent.Rotate(new Vector3(0, 0, -(float)(posIdx - newIdx) * 360.0f / 64));
     }
 
-    private void MovetoNearest(Vector3 position)
+    private void MovetoNearest(Vector3 pos)
     {
-        float minDis = Vector3.Distance(position, positions[0]);
+        float minDis = Vector3.Distance(pos, positions[0]);
         int minIdx = 0;
         for (int i = 1; i < 64; i++)
         {
-            float dis = Vector3.Distance(position, positions[i]);
+            float dis = Vector3.Distance(pos, positions[i]);
             if (dis < minDis)
             {
                 minIdx = i;
                 minDis = dis;
             }
         }
-        transform.position = positions[minIdx];
+        parent.Rotate(new Vector3(0, 0, -(float)(posIdx - minIdx) * 360.0f / 64));
+        for (int i = 0; i < last_speed.Length - 1; i++)
+        {
+            last_speed[i + 1] = last_speed[i];
+        }
+        for (int i = 0; i < last_speed.Length; i++)
+            speed += last_speed[i];
+        last_speed[0] = 0;
+       while (posIdx != minIdx)
+        {
+            posIdx = addToIndex(posIdx, -1);
+            last_speed[0] += 1;
+        }
+        if (last_speed[0] > 32)
+            last_speed[0] -= 64;
+        speed /= last_speed.Length;
+        advencement += (int)speed;
         posIdx = minIdx;
-        parent.Rotate(new Vector3(0, 0, (float)posIdx * 360.0f / 64 - 90));
     }
 
     private void checkDistance()
     {
         mousePos = Input.mousePosition;
+        Vector3 dir;
+        if (Vector3.Distance(mousePos, oldMousePos) > 0.2f)
+        {
+            dir = mousePos - oldMousePos;
+            dir = dir.normalized;
+        }
+        else
+        {
+            dir = new Vector3(0, 0, 0);
+        }
+        mousePos = oldMousePos + dir * speed;
         mousePos.z = 10;
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mousePos.z = transform.position.z;
-        float t = Vector3.Distance(mousePos, transform.position);
-        if (t > maxDistance)
-            ToggleOff();
+        float distance_pivot_mouse = Vector3.Distance(mousePos, pivot.position);
+        float distance_handle_pivot = Vector3.Distance(transform.position, pivot.position);
+        oldMousePos = Input.mousePosition;
     }
 
-    // Update is called once per frame
+    private void checkAdvencement()
+    {
+        if (advencement > 64)
+        {
+            advencement -= 64;
+            level.Increase();
+        }
+        if (advencement < -64)
+        {
+            level.Increase();
+            advencement += 64;
+        }
+
+    }
+        // Update is called once per frame
     void Update () {
         checkDistance();
         Accelerate();
         Move();
-	}
+        checkAdvencement();
+    }
 }
