@@ -23,6 +23,9 @@ public class Manage_my_boss : MonoBehaviour
     private System.Random random = new System.Random();
     private System.Random R_Angry = new System.Random();
     private bool Angry = false;
+
+    private Vector3 base_position;
+    private bool animUp;
     #endregion
 
     private int RandomNumber(int min, int max)
@@ -36,6 +39,7 @@ public class Manage_my_boss : MonoBehaviour
         T_Angry = RandomNumber(Temps_Enrage_min, Temps_Enrage_max);
         tmp = T_Angry;
         Boss = GetComponentInChildren<SpriteRenderer>();
+        base_position = Boss.transform.position;
         A_source = GetComponentInChildren<AudioSource>();
         A_source2 = GetComponentInChildren<AudioSource>();
         Boss.enabled = false;
@@ -59,7 +63,8 @@ public class Manage_my_boss : MonoBehaviour
             if (i >= tmp)
             {
                 Angry = true;
-                A_source.Play();
+                if (!A_source.isPlaying)
+                    A_source.Play();
             }
         }
         A_source.Stop();
@@ -82,17 +87,31 @@ public class Manage_my_boss : MonoBehaviour
     {
         while (Boss.transform.localPosition.y < -2.10)
         {
-            Debug.Log(Boss.transform.localPosition);
             Boss.transform.Translate(new Vector3(0, 0.1f, 0));
             yield return new WaitForSeconds(0.01f);
         }
-        while ()
+        while (Boss.enabled)
+        {
+            Debug.Log("Boss");
+            while (Boss.transform.localPosition.y > -2.80 && Boss.enabled)
+            {
+                Boss.transform.Translate(new Vector3(0, -0.2f, 0));
+                yield return new WaitForSeconds(0.01f);
+            }
+            while (Boss.transform.localPosition.y < -2.10 && Boss.enabled)
+            {
+                Boss.transform.Translate(new Vector3(0, 0.2f, 0));
+                yield return new WaitForSeconds(0.01f);
+            }
+            yield return new WaitForSeconds(0.03f);
+        }
     }
 
     void BossAlive()
     {
         if (Counter >= Spam)
         {
+            Boss.transform.position = base_position;
             Boss.enabled = false;
             Angry = false;
             mm.SendMessage("ReceiveValidation", "BOSS SUCCED");

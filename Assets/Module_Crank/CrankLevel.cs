@@ -19,7 +19,9 @@ public class CrankLevel : MonoBehaviour {
     public GameObject mm;
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        screen = GameObject.Find("black_curtain").GetComponent<SpriteRenderer>();
         mm = GameObject.Find("ModuleManager");
         lastDecrease = Time.time;
         level = levelMax / 2;
