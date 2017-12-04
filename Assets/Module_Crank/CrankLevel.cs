@@ -15,10 +15,11 @@ public class CrankLevel : MonoBehaviour {
     private float lowWater = 0;
     private float highWater = 0;
     private int level;
-    public ModuleManager mm;
+    public GameObject mm;
 
     // Use this for initialization
     void Start () {
+        mm = GameObject.Find("ModuleManager");
         lastDecrease = Time.time;
         level = levelMax / 2;
         MoveWater(-levelMax / 2);
@@ -104,7 +105,7 @@ public class CrankLevel : MonoBehaviour {
             else
             {
                 light.enabled = false;
-                mm.ReceiveValidation("CRANK FAILED");
+                mm.SendMessage("ReceiveValidation", "CRANK FAILED");
             }
         }
     }

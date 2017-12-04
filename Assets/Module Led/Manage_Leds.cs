@@ -212,10 +212,6 @@ public class Manage_Leds : MonoBehaviour
                 L_is_on[5] = false;
             }
         }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            Shuffle();
-        }
     }
 
     #endregion

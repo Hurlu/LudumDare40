@@ -53,12 +53,7 @@ public class Manage_my_boss : MonoBehaviour
 
         while (Boss.enabled)
         {
-            if (Boss.transform.position.y < -1.90)
-            {
-                Debug.Log(Boss.transform);
-                Boss.transform.TransformDirection(Vector3.up);
-            }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.2f);
             i++;
             BossAlive();
             if (i >= tmp)
@@ -84,12 +79,13 @@ public class Manage_my_boss : MonoBehaviour
 
     IEnumerator LiftUpBoss()
     {
-        while (Boss.transform.localPosition.y < -2.40)
+        while (Boss.transform.localPosition.y < -2.10)
         {
             Debug.Log(Boss.transform.localPosition);
             Boss.transform.Translate(new Vector3(0, 0.1f, 0));
             yield return new WaitForSeconds(0.01f);
         }
+        while ()
     }
 
     void BossAlive()
@@ -104,7 +100,7 @@ public class Manage_my_boss : MonoBehaviour
     {
         if (uni_timer <= 0 && !Boss.enabled)
             SpawnBoss();
-        if (Input.GetKeyUp(KeyCode.S) && Boss.enabled == true)
+        if (Input.GetKeyUp(KeyCode.S) && Boss.enabled)
         {
             if (A_source2.isPlaying == false)
             {

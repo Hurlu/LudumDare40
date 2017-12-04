@@ -14,13 +14,17 @@ public class Manage_ventilo : MonoBehaviour
     public Vector3 unpressSpritePos;
     public Vector3 pressSpritePos;
 
-    public ModuleManager mm;   // Module Manager
+    private AudioSource windNoise;
+
+    private GameObject mm;   // Module Manager
     private bool releasing = false;
 
     // Use this for initialization
     void Start()
     {
+        mm = GameObject.Find("ModuleManager");
         unpress_speed = pressure_speed * 2;
+        windNoise = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -40,6 +44,7 @@ public class Manage_ventilo : MonoBehaviour
     {
         if (!releasing)
         {
+            windNoise.Play();
             releasing = true;
             HandleRender.sprite = unpressSprite;
             HandleRender.transform.position = unpressSpritePos;
@@ -57,6 +62,7 @@ public class Manage_ventilo : MonoBehaviour
     {
         if (releasing)
         {
+            windNoise.Stop();
             releasing = false;
             HandleRender.sprite = pressureSprite;
             HandleRender.transform.position = pressSpritePos;
@@ -67,7 +73,7 @@ public class Manage_ventilo : MonoBehaviour
             NeedlePivot.transform.localEulerAngles =
                 new Vector3(NeedlePivot.transform.localEulerAngles.x, NeedlePivot.transform.localEulerAngles.y,
                     NeedlePivot.transform.localEulerAngles.z - pressure_speed);
-            mm.ReceiveValidation("VANNE FAILED");
+            mm.SendMessage("ReceiveValidation", "VANNE FAILED");
         }
     }
 }
