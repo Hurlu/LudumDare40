@@ -117,6 +117,33 @@ public class Level2 : ALevel
     }
 }
 
+public class Level3 : ALevel
+{
+    public Level3()
+    {
+        level = 3;
+        completion = false;
+    }
+
+    public override void GetValidation(string message)
+    {
+
+    }
+}
+
+public class Level4 : ALevel
+{
+    public Level4()
+    {
+        level = 3;
+        completion = false;
+    }
+
+    public override void GetValidation(string message)
+    {
+
+    }
+}
 
 public class ModuleManager : MonoBehaviour
 {
