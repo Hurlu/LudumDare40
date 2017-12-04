@@ -17,9 +17,12 @@ public class BucketScript : MonoBehaviour
     private float screenPoint = 10;
     private Vector3 offset;
 
+    private Vector3 base_position;
+
 	// Use this for initialization
 	void Start ()
 	{
+	    base_position = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -37,6 +40,11 @@ public class BucketScript : MonoBehaviour
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
         transform.position = curPosition;
+    }
+
+    void OnMouseUp()
+    {
+        transform.position = base_position;
     }
 
     void Overflow()

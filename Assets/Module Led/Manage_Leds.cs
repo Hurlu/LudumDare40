@@ -10,7 +10,7 @@ public class Manage_Leds : MonoBehaviour
     public int Temps = 10;
     public float Multiplicateur = 1.15f;
     public float Multiplicateur1 = 1;
-    public ModuleManager mm;
+    private GameObject mm;
     public SpriteRenderer[] SR_lamps_ex = new SpriteRenderer[6];
     public SpriteRenderer[] SR_lamps_array = new SpriteRenderer[6];
     public SpriteRenderer[] SR_number_array = new SpriteRenderer[6];
@@ -230,9 +230,9 @@ public class Manage_Leds : MonoBehaviour
                 match = 1;
         }
         if (match == 1)
-            mm.ReceiveValidation("LAMPE FAILED");
+            mm.SendMessage("ReceiveValidation", "LAMPE FAILED");
         else if (match == 0)
-            mm.ReceiveValidation("LAMPE SUCCEED");
+            mm.SendMessage("ReceiveValidation", "LAMPE SUCCEED");
         for (int i = 0; i < 6; i++)
         {
             L_is_onEx[i] = false;
@@ -259,6 +259,7 @@ public class Manage_Leds : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        mm = GameObject.Find("ModuleManager");
         for (int i = 0; i < 6; i++)
         {
             L_is_on[i] = false;

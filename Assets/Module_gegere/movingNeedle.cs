@@ -65,7 +65,7 @@ public class movingNeedle : MonoBehaviour {
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (isPlaying == false)
+        if (isPlaying == false && other.name == "limit")
         {
             lecteur.Play();
             isPlaying = true;
@@ -74,7 +74,10 @@ public class movingNeedle : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        isPlaying = false;
-        lecteur.Stop();
+        if (collision.name == "limit")
+        {
+            isPlaying = false;
+            lecteur.Stop();
+        }
     }
 }
