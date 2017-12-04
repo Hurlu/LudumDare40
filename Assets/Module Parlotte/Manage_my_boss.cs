@@ -11,7 +11,7 @@ public class Manage_my_boss : MonoBehaviour
     public int Temps_Enrage_max;
     public float Multiplicateur;
     public float Diviseur;
-    public ModuleManager mm;
+    private GameObject mm;
     public AudioClip[] Audios = new AudioClip[2];
     private int T_Angry;
     private float Spam = 10;
@@ -76,7 +76,7 @@ public class Manage_my_boss : MonoBehaviour
     {
         if (Counter >= Spam)
             Boss.enabled = false;
-        mm.ReceiveValidation("BOSS SUCCED");
+        mm.SendMessage("ReceiveValidation", "BOSS SUCCED");
     }
 
     // Update is called once per frame
