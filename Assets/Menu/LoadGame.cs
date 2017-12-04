@@ -7,7 +7,8 @@ public class LoadGame : MonoBehaviour {
 
 	public void  Load(string name) {
         Debug.Log(name);
-        //        SceneManager.LoadScene("Menu", LoadSceneMode.Additive); Give full path
+        SceneManager.LoadScene(name);
+        // Give full path
     }
 
     public void QuitGame()
