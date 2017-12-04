@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class BucketScript : MonoBehaviour
 {
@@ -57,17 +59,19 @@ public class BucketScript : MonoBehaviour
 
     void AddDrop()
     {
-        if (_currentFill == maxFill)
-            this.Overflow();
-        _currentFill++;
-        if (_currentFill == maxFill)
+        if (_currentFill > maxFill)
+            Overflow();
+        else if (_currentFill == maxFill)
             GetComponent<SpriteRenderer>().sprite = FullBucket;
+        _currentFill++;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "WaterHole" && _currentFill > 2)
+        Debug.LogFormat("Boing with {0}, while current = {1} et max == {2}",other.name, _currentFill, maxFill);
+        if (other.name == "WaterHole" && _currentFill >= maxFill)
         {
+            GetComponent<SpriteRenderer>().sprite = EmptyBucket;
             GameObject.Find("ModuleManager").SendMessage("ReceiveValidation", "BucketSuccess");
             _currentFill = 0;
         }
