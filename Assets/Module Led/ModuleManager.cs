@@ -69,48 +69,41 @@ public class Level2 : ALevel
 
     public override void GetValidation(string message)
     {
-        Debug.Log("Validation == " + _buttonpress_validations);
-        Debug.Log("Validation == " + _buttonpress_failures);
-        if (message == "LAMPE SUCCEED")
+        Debug.Log("Received this for LV2 : " + message);
+        if (message == "LAMPE SUCCEED" || message == "ButtonGood")
         {
-            Debug.Log("Getting validation for Lampe !");
             _buttonpress_validations++;
         }
 
-        if (message == "LAMPE FAILED")
+        if (message == "LAMPE FAILED" || message == "ButtonBad")
         {
-            Debug.Log("Getting failure for Lampe !");
+            Debug.Log("Ouhla!");
             _buttonpress_failures++;
         }
 
         if (message == "VANNE FAILED")
         {
-            Debug.Log("Getting failure for Lampe !");
             _buttonpress_failures++;
         }
 
         if (message == "CRANK FAILED")
         {
-            Debug.Log("Getting failure for Crank !");
             _buttonpress_failures++;
         }
 
         if (message == "BOSS FAILED")
         {
-            Debug.Log("Getting failure for Boss !");
             _buttonpress_failures++;
         }
 
         if (_buttonpress_validations >= 3)
         {
-            Debug.Log("Completion is true !");
             completion = true;
         }
 
         if (_buttonpress_failures >= 2)
         {
-            Debug.Log("Failure !");
-            //LOAD GAME OVER
+            GameOver();
             completion = true;
         }
 
@@ -119,6 +112,8 @@ public class Level2 : ALevel
 
 public class Level3 : ALevel
 {
+    private int _button, _led, _geiger, _ventilo, _bucket = 0;
+
     public Level3()
     {
         level = 3;
@@ -127,21 +122,37 @@ public class Level3 : ALevel
 
     public override void GetValidation(string message)
     {
-
-    }
-}
-
-public class Level4 : ALevel
-{
-    public Level4()
-    {
-        level = 3;
-        completion = false;
-    }
-
-    public override void GetValidation(string message)
-    {
-
+        switch (message)
+        {
+            case "ButtonGood":
+                _button++;
+                break;
+            case "ButtonBad":
+                _button--;
+                break;
+            case "LAMPE SUCCEED":
+                _led++;
+                break;
+            case "LAMPE FAILED":
+                _led--;
+                break;
+            case "GeigerFail":
+                _geiger--;
+                break;
+            case "VANNE FAILED":
+                _ventilo--;
+                break;
+            case "BucketSuccess":
+                _bucket++;
+                break;
+            case "BucketFail":
+                _bucket--;
+                break;
+        }
+        if (_ventilo < 0 || _led < -2 || _button < -1 || _bucket < -2 || _geiger < 0)
+            GameOver();
+        if (_led > 3 && _button > 4 && _bucket > 2)
+            completion = true;
     }
 }
 
@@ -214,6 +225,8 @@ public class ModuleManager : MonoBehaviour
             Debug.Log("Level 1 réussi !");
             _currentLevel = null;
             _currentLevel = new Level2();
+            _currentModules.Add("Button", Instantiate(_modules[(int)Modules.BUTTON]));
+            _currentModules["Button"].transform.SetParent(transform);
             _currentModules.Add("Boss", Instantiate(_modules[(int)Modules.PARLOTTE]));
             _currentModules["Boss"].transform.SetParent(transform);
         }
@@ -221,11 +234,21 @@ public class ModuleManager : MonoBehaviour
 
     void UpdateLevel2()
     {
+        if (_currentLevel.completion)
+        {
+            _currentLevel = null;
+            _currentLevel = new Level3();
+            _currentModules.Add("Geiger", Instantiate(_modules[(int)Modules.GEIGER]));
+            _currentModules["Geiger"].transform.SetParent(transform);
+            _currentModules.Add("Ventilo", Instantiate(_modules[(int)Modules.VENTILO]));
+            _currentModules["Ventilo"].transform.SetParent(transform);
+            _currentModules.Add("Bucket", Instantiate(_modules[(int)Modules.BUCKET]));
+            _currentModules["Bucket"].transform.SetParent(transform);
+        }
     }
 
     void UpdateLevel3()
     {
-
     }
 
     void UpdateLevel4()

@@ -25,9 +25,9 @@ public class movingNeedle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (loosing == 0)
-            Debug.Log("You loose");
-        if (takeANewDirection == ChangeDirectionSpeed)
+	    if (loosing == 0)
+	        GameObject.Find("ModuleManager").SendMessage("ReceiveValidation", "GeigerFail");
+	    if (takeANewDirection == ChangeDirectionSpeed)
         {
             direction = (Random.Range(0, 2) == 0) ? Vector3.back : Vector3.forward;
         }

@@ -73,6 +73,9 @@ public class Manage_ventilo : MonoBehaviour
             NeedlePivot.transform.localEulerAngles =
                 new Vector3(NeedlePivot.transform.localEulerAngles.x, NeedlePivot.transform.localEulerAngles.y,
                     NeedlePivot.transform.localEulerAngles.z - pressure_speed);
+        }
+        else
+        {
             mm.SendMessage("ReceiveValidation", "VANNE FAILED");
         }
     }

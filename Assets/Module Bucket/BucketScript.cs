@@ -51,6 +51,7 @@ public class BucketScript : MonoBehaviour
     void Overflow()
     {
         GetComponent<SpriteRenderer>().sprite = OverFlowBucket;
+        GameObject.Find("ModuleManager").SendMessage("ReceiveValidation", "BucketFail");
         Debug.Log("Oh noes, it overflowes !");
     }
 
@@ -63,19 +64,12 @@ public class BucketScript : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = FullBucket;
     }
 
-    IEnumerator SpillBucket()
-    {
-        GetComponent<SpriteRenderer>().sprite = SpillingBucket;
-        yield return new WaitForSeconds(0.17f);
-        GetComponent<SpriteRenderer>().sprite = EmptyBucket;
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "WaterHole" && _currentFill > 0)
+        if (other.name == "WaterHole" && _currentFill > 2)
         {
+            GameObject.Find("ModuleManager").SendMessage("ReceiveValidation", "BucketSuccess");
             _currentFill = 0;
-            StartCoroutine(SpillBucket());
         }
     }
 
