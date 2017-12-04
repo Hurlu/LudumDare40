@@ -100,27 +100,5 @@ public class CrankLevel : MonoBehaviour {
                 secondLight.enabled = false;
             }
         }
-        if (level > 26)
-        {
-            if (Time.time - highWater < 5)
-            {
-                secondLight.enabled = !secondLight.enabled;
-            }
-            else
-            {
-                lampe.enabled = false;
-                brokenLampe.enabled = true;
-                secondLight.enabled = false;
-            }
-            if (Time.time - highWater < 10)
-            {
-                light.enabled = !light.enabled;
-            }
-            else
-            {
-                light.enabled = false;
-                mm.SendMessage("ReceiveValidation", "CRANK FAILED");
-            }
-        }
     }
 }
