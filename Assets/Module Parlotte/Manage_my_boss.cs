@@ -22,7 +22,7 @@ public class Manage_my_boss : MonoBehaviour
     private float tmp;
     private System.Random random = new System.Random();
     private System.Random R_Angry = new System.Random();
-
+    private bool Angry = false;
     #endregion
 
     private int RandomNumber(int min, int max)
@@ -63,6 +63,7 @@ public class Manage_my_boss : MonoBehaviour
             BossAlive();
             if (i >= tmp)
             {
+                Angry = true;
                 A_source.Play();
             }
         }
@@ -95,8 +96,11 @@ public class Manage_my_boss : MonoBehaviour
     void BossAlive()
     {
         if (Counter >= Spam)
+        {
             Boss.enabled = false;
-        mm.SendMessage("ReceiveValidation", "BOSS SUCCED");
+            Angry = false;
+            mm.SendMessage("ReceiveValidation", "BOSS SUCCED");
+        }
     }
 
     // Update is called once per frame
