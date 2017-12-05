@@ -7,7 +7,8 @@ public class Manage_Leds : MonoBehaviour
 {
     #region "Variables"
     public KeyCode[] Keycode_array = new KeyCode[6];
-    public int Temps = 10;
+    public int Temps_Initial = 10;
+    public float Temps_min = 4;
     public float Multiplicateur = 1.15f;
     public float Multiplicateur1 = 1;
     private GameObject mm;
@@ -36,10 +37,21 @@ public class Manage_Leds : MonoBehaviour
     IEnumerator WaitForEnd()
     {
         int i = 0;
-        float tmp = Temps * Multiplicateur1;
+        float tmp;
+        float cmp = Temps_Initial * (Multiplicateur1 / Multiplicateur);
 
-        tmp = (int)tmp;
-        Multiplicateur1 /= Multiplicateur;
+        if (cmp > Temps_min)
+        {
+            tmp = Temps_Initial * Multiplicateur1;
+            tmp = (int)tmp;
+            Multiplicateur1 /= Multiplicateur;
+        }
+        else
+        {
+            tmp = Temps_Initial * Multiplicateur1;
+            tmp = (int)tmp;
+        }
+        Debug.Log(Temps_Initial);
         while (i <= tmp)
         {
             yield return new WaitForSeconds(1);
