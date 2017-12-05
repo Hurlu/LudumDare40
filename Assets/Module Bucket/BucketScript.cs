@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.Design;
-using UnityEngine;
-using UnityEngine.Experimental.UIElements;
+﻿using UnityEngine;
 
 public class BucketScript : MonoBehaviour
 {
@@ -18,10 +15,12 @@ public class BucketScript : MonoBehaviour
     private Vector3 offset;
 
     private Vector3 base_position;
+    private AudioSource ploc;
 
 	// Use this for initialization
 	void Start ()
 	{
+	    ploc = GetComponent<AudioSource>();
 	    base_position = transform.position;
 	}
 	
@@ -76,6 +75,7 @@ public class BucketScript : MonoBehaviour
         if (other.name.StartsWith("WaterDrop") && other.transform.position.y < DropDiseappearance)
         {
             AddDrop();
+            ploc.Play();
             Destroy(other.gameObject);
         }
     }

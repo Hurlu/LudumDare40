@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor.VersionControl;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ALevel
@@ -128,12 +124,12 @@ public class ModuleManager : MonoBehaviour
     {
         BUCKET = 0,
         BUTTON = 1,
-        LED = 2,
-        MOLETTE = 3,
-        PARLOTTE = 4,
-        WRITING = 5,
-        CRANK = 6,
-        VENTILO = 7,
+        LED,
+        MOLETTE,
+        PARLOTTE,
+        CRANK,
+        VENTILO,
+        GEIGER
     }
 
     public List<GameObject> _modules;
@@ -146,8 +142,10 @@ public class ModuleManager : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 	    _currentLevel = new Level1();
-/*		_currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
-	    _currentModules["Crank"].transform.SetParent(transform);*/
+		_currentModules.Add("Crank", Instantiate(_modules[(int)Modules.CRANK]));
+	    _currentModules["Crank"].transform.SetParent(transform);
+	    _currentModules.Add("Led", Instantiate(_modules[(int)Modules.LED]));
+	    _currentModules["Led"].transform.SetParent(transform);
 	}
 	
     // Update is called once per frame
@@ -188,12 +186,13 @@ public class ModuleManager : MonoBehaviour
             Debug.Log("Level 1 réussi !");
             _currentLevel = null;
             _currentLevel = new Level2();
+            _currentModules.Add("Boss", Instantiate(_modules[(int)Modules.PARLOTTE]));
+            _currentModules["Boss"].transform.SetParent(transform);
         }
     }
 
     void UpdateLevel2()
     {
-
     }
 
     void UpdateLevel3()
